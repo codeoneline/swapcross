@@ -1,0 +1,18 @@
+{
+  "name": "swapcross",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "testnet": "HTTP_PROXY=http://127.0.0.1:7897 HTTPS_PROXY=http://127.0.0.1:7897 node -r dotenv/config tryOkxSdk.js dotenv_config_path=.env",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@okx-dex/okx-dex-sdk": "^1.0.17",
+    "dotenv": "^17.2.3",
+    "https-proxy-agent": "^7.0.6"
+  }
+}
