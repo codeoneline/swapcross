@@ -18,6 +18,8 @@ const ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'; // Native ETH
 
 // Chain ID for Base Chain
 const chainIndex = '8453';
+// Chain ID for Ethereum Chain
+const chainIndexEth = '1';
 
 // API URL
 const baseUrl = 'https://web3.okx.com/api/v6/';
@@ -37,7 +39,7 @@ function getHeaders(timestamp, method, requestPath, queryString = "", body = "")
 
     const stringToSign = timestamp + method + requestPath + (queryString || body);
 
-    return {
+    const headers = {
         "Content-Type": "application/json",
         "OK-ACCESS-KEY": apiKey,
         "OK-ACCESS-SIGN": CryptoJS.enc.Base64.stringify(
@@ -47,6 +49,8 @@ function getHeaders(timestamp, method, requestPath, queryString = "", body = "")
         "OK-ACCESS-PASSPHRASE": apiPassphrase,
         "OK-ACCESS-PROJECT": projectId,
     };
+    console.log(`path=${requestPath},query=${queryString},body=${body}, headers = ${JSON.stringify(headers, null, 2)}`)
+    return headers
 }
 
 /**
@@ -105,6 +109,27 @@ async function getSwapData(
 }
 
 /**
+ * Get supported chain from OKX API
+ */
+async function getSupportedChain() {
+    const path = 'dex/aggregator/supported/chain';
+    const url = `${baseUrl}${path}`;
+    const params = { chainIndex: chainIndex };
+    
+    const queryString = "?" + new URLSearchParams(params).toString();
+    const timestamp = new Date().toISOString();
+    const headers = getHeaders(timestamp, 'GET', `/api/v6/${path}`, queryString);
+
+
+    const response = await axios.get(`${url}${queryString}`, { headers });
+    const responseData = response.data;
+    if (responseData.code === '0') {
+        return responseData.data[0];
+    }
+    throw new Error(`Swap API Error: ${responseData.msg || 'Unknown error'}`);
+}
+
+/**
  * Build and sign transaction using gas limit
  */
 async function buildAndSignTransaction(swapData, gasLimit) {
@@ -145,6 +170,14 @@ async function broadcastTransaction(signedTx, chainIndex, walletAddress) {
     throw new Error(`Broadcast API Error: ${response.data.msg || 'Unknown error'}`);
 }
 
+function sleep(ms) {
+	return new Promise(function (resolve, reject) {
+		setTimeout(function () {
+			resolve();
+		}, ms);
+	})
+};
+
 async function main() {
     try {
         console.log('EVM Gas Limit and Broadcast');
@@ -159,24 +192,41 @@ async function main() {
         console.log(`Chain ID: ${chainIndex}`);
         console.log(`RPC URL: ${process.env.EVM_RPC_URL || 'https://mainnet.base.org'}`);
 
+        let chainInfo =  {
+            "chainId": 8453,
+            "chainIndex": 8453,
+            "chainName": "Base",
+            "dexTokenApproveAddress": "0x57df6092665eb6058DE53939612413ff4B09114E"
+          }
+        do {
+            try {
+                if (!chainInfo) {
+                    chainInfo = await getSupportedChain()
+                    console.log(`getSupportedChain ${JSON.stringify(chainInfo, null, 2)}`)
+                }
+            } catch (error) {
+                await sleep(10000)
+            }
+        } while (true);
+
         // Example parameters
-        const fromToken = ETH_ADDRESS;
-        const toToken = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC on Base
-        const amount = '100000000000000'; // 0.0001 ETH in wei
-        const slippagePercent = '0.5'; // 0.5%
+        // const fromToken = ETH_ADDRESS;
+        // const toToken = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC on Base
+        // const amount = '100000000000000'; // 0.0001 ETH in wei
+        // const slippagePercent = '0.5'; // 0.5%
 
-        // Step 1: Get swap data
-        const swapData = await getSwapData(fromToken, toToken, amount, slippagePercent);
-        console.log('Swap data obtained');
+        // // Step 1: Get swap data
+        // const swapData = await getSwapData(fromToken, toToken, amount, slippagePercent);
+        // console.log('Swap data obtained');
 
-        // Step 2: Get gas limit
-        const gasLimit = await getGasLimit(
-            swapData.tx.from,
-            swapData.tx.to,
-            swapData.tx.value || '0',
-            swapData.tx.data
-        );
-        console.log('Gas limit obtained', gasLimit);
+        // // Step 2: Get gas limit
+        // const gasLimit = await getGasLimit(
+        //     swapData.tx.from,
+        //     swapData.tx.to,
+        //     swapData.tx.value || '0',
+        //     swapData.tx.data
+        // );
+        // console.log('Gas limit obtained', gasLimit);
 
         // Step 3: Build and sign transaction
         // const signedTx = await buildAndSignTransaction(swapData, gasLimit);

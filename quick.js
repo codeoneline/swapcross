@@ -19,6 +19,7 @@ function preHash(timestamp, method, request_path, params) {
   if (method === 'POST' && params) {
     query_string = JSON.stringify(params);
   }
+  console.log(`query_string ${query_string}`)
   return timestamp + method + request_path + query_string;
 }
 
@@ -126,3 +127,6 @@ const postParams = {
   'slug': 'sats'
 };
 sendPostRequest(postRequestPath, postParams);
+
+
+sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
