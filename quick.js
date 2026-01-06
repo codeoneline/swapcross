@@ -145,7 +145,7 @@ function sendPostRequest(request_path, params) {
 //   slippage: 0.05,
 //   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
 // })
-sendGetRequest('/api/v5/dex/aggregator/swap', {
+sendGetRequest('/api/v6/dex/aggregator/swap', {
   chainIndex: 1,
   amount: 10000000000000,
   toTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc on base
