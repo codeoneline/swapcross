@@ -157,7 +157,7 @@ sendGetRequest('/api/v6/dex/aggregator/swap', {
 setTimeout(() => {
   sendGetRequest('/api/v6/dex/aggregator/swap', {
     chainIndex: 1,
-    amount: 10000000000000,
+    amount: 100000000,
     toTokenAddress: '0x55d398326f99059ff775485246999027b3197955', // USDT 
     fromTokenAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
     slippagePercent: 0.05,
