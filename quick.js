@@ -8,6 +8,7 @@ const api_config = {
   "api_key": 'dc3284bd-7da1-4b62-a6ad-be69d7974aaa',
   "secret_key": 'F021AF5B8EE5391CC1BF0B6CDF90A36D',
   "passphrase": 'Jkl456,,,...',
+  "project_id": 'ed09a0bf98c4bdcf3ed9b2d43aef7e4d',
 };
 
 function preHash(timestamp, method, request_path, params) {
@@ -49,7 +50,7 @@ function sendGetRequest(request_path, params) {
     'OK-ACCESS-SIGN': signature,
     'OK-ACCESS-TIMESTAMP': timestamp,
     'OK-ACCESS-PASSPHRASE': api_config['passphrase'],
-    // "OK-ACCESS-PROJECT": projectId,
+    // "OK-ACCESS-PROJECT": api_config['project_id'],
   };
 
   const options = {
@@ -83,6 +84,7 @@ function sendPostRequest(request_path, params) {
     'OK-ACCESS-SIGN': signature,
     'OK-ACCESS-TIMESTAMP': timestamp,
     'OK-ACCESS-PASSPHRASE': api_config['passphrase'],
+    // "OK-ACCESS-PROJECT": api_config['project_id'],
     'Content-Type': 'application/json'
   };
 
@@ -111,22 +113,25 @@ function sendPostRequest(request_path, params) {
 }
 
 
-// GET 请求示例
-const getRequestPath = '/api/v6/dex/aggregator/quote';
-const getParams = {
-  'chainIndex': 42161,
-  'amount': 1000000000000,
-  'toTokenAddress': '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-  'fromTokenAddress': '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
-};
-sendGetRequest(getRequestPath, getParams);
+// // GET 请求示例
+// const getRequestPath = '/api/v6/dex/aggregator/quote';
+// const getParams = {
+//   'chainIndex': 42161,
+//   'amount': 1000000000000,
+//   'toTokenAddress': '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+//   'fromTokenAddress': '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
+// };
+// // ?chainIndex=42161&amount=1000000000000&toTokenAddress=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&fromTokenAddress=0x82aF49447D8a07e3bd95BD0d56f35241523fBab1
+// sendGetRequest(getRequestPath, getParams);
 
-// POST 请求示例
-const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
-const postParams = {
-  'slug': 'sats'
-};
-sendPostRequest(postRequestPath, postParams);
+// // POST 请求示例
+// const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
+// // {"slug":"sats"}
+// const postParams = {
+//   'slug': 'sats'
+// };
+// sendPostRequest(postRequestPath, postParams);
 
 
-sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
+// sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
+sendGetRequest('/api/v6/dex/aggregator/all-tokens', {chainIndex: 1})
