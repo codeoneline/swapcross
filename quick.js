@@ -157,8 +157,8 @@ sendGetRequest('/api/v6/dex/aggregator/swap', {
 sendGetRequest('/api/v6/dex/aggregator/swap', {
   chainIndex: 1,
   amount: 10000000000000,
-  toTokenAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // USDT 
-  fromTokenAddress: '0x55d398326f99059ff775485246999027b3197955', // WBNB
+  toTokenAddress: '0x55d398326f99059ff775485246999027b3197955', // USDT 
+  fromTokenAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
   slippagePercent: 0.05,
   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
 })
