@@ -134,4 +134,14 @@ function sendPostRequest(request_path, params) {
 
 
 // sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
-sendGetRequest('/api/v6/dex/aggregator/all-tokens', {chainIndex: 1})
+// sendGetRequest('/api/v6/dex/aggregator/all-tokens', {chainIndex: 1})
+
+// ?chainIndex=1&amount=10000000000000&toTokenAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&fromTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&slippage=0.05&userWalletAddress=0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
+sendGetRequest('/api/v6/dex/aggregator/swap', {
+  chainIndex: 1,
+  amount: 10000000000000,
+  toTokenAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // usdc on base
+  fromTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // Native ETH
+  slippage: 0.05,
+  userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
+})
