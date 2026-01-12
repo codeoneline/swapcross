@@ -7,13 +7,35 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "quick2",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceFolder}/quick2.js",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "okx-swap-claude",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceFolder}/okx-swap-claude.js",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "main",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "cwd": "${workspaceRoot}",
       "program": "${workspaceFolder}/main.js",
-      "envFile": "${workspaceFolder}/.env.dev"
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "node",
@@ -24,7 +46,7 @@
       ],
       "cwd": "${workspaceRoot}",
       "program": "${workspaceFolder}/test.js",
-      "envFile": "${workspaceFolder}/.env.dev"
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "node",

@@ -3,6 +3,11 @@ const https = require('https');
 const crypto = require('crypto');
 const querystring = require('querystring');
 
+// 配置代理
+const { HttpsProxyAgent } = require('https-proxy-agent');
+const proxyUrl = 'http://127.0.0.1:7897'; // 你的代理地址
+const agent = new HttpsProxyAgent(proxyUrl);
+
 // 定义 API 凭证
 const api_config = {
   "api_key": 'dc3284bd-7da1-4b62-a6ad-be69d7974aaa',
@@ -34,6 +39,7 @@ function sign(message, secret_key) {
 function createSignature(method, request_path, params) {
   // 获取 ISO 8601 格式时间戳
   const timestamp = new Date().toISOString().slice(0, -5) + 'Z';
+  // const timestamp = new Date().toISOString();
   // 生成签名
   const message = preHash(timestamp, method, request_path, params);
   const signature = sign(message, api_config['secret_key']);
@@ -50,6 +56,7 @@ function sendGetRequest(request_path, params) {
     'OK-ACCESS-SIGN': signature,
     'OK-ACCESS-TIMESTAMP': timestamp,
     'OK-ACCESS-PASSPHRASE': api_config['passphrase'],
+    'Content-Type': 'application/json'
     // "OK-ACCESS-PROJECT": api_config['project_id'],
   };
 
@@ -57,7 +64,8 @@ function sendGetRequest(request_path, params) {
     hostname: 'web3.okx.com',
     path: request_path + (params ? `?${querystring.stringify(params)}` : ''),
     method: 'GET',
-    headers: headers
+    headers: headers,
+    agent, // 加代理
   };
 
   const req = https.request(options, (res) => {
@@ -68,6 +76,9 @@ function sendGetRequest(request_path, params) {
     res.on('end', () => {
       console.log(data);
     });
+  });
+  req.on('error', (error) => {
+      console.error('Error:', error);
   });
 
   req.end();
@@ -84,7 +95,7 @@ function sendPostRequest(request_path, params) {
     'OK-ACCESS-SIGN': signature,
     'OK-ACCESS-TIMESTAMP': timestamp,
     'OK-ACCESS-PASSPHRASE': api_config['passphrase'],
-    // "OK-ACCESS-PROJECT": api_config['project_id'],
+    "OK-ACCESS-PROJECT": api_config['project_id'],
     'Content-Type': 'application/json'
   };
 
@@ -92,7 +103,8 @@ function sendPostRequest(request_path, params) {
     hostname: 'web3.okx.com',
     path: request_path,
     method: 'POST',
-    headers: headers
+    headers: headers,
+    agent, // 加代理
   };
 
   const req = https.request(options, (res) => {
@@ -124,13 +136,13 @@ function sendPostRequest(request_path, params) {
 // // ?chainIndex=42161&amount=1000000000000&toTokenAddress=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&fromTokenAddress=0x82aF49447D8a07e3bd95BD0d56f35241523fBab1
 // sendGetRequest(getRequestPath, getParams);
 
-// // POST 请求示例
-// const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
-// // {"slug":"sats"}
-// const postParams = {
-//   'slug': 'sats'
-// };
-// sendPostRequest(postRequestPath, postParams);
+// POST 请求示例
+const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
+// {"slug":"sats"}
+const postParams = {
+  'slug': 'sats'
+};
+sendPostRequest(postRequestPath, postParams);
 
 
 // sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
@@ -145,22 +157,22 @@ function sendPostRequest(request_path, params) {
 //   slippage: 0.05,
 //   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
 // })
-sendGetRequest('/api/v6/dex/aggregator/swap', {
-  chainIndex: 1,
-  amount: 10000000000000,
-  toTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc on base
-  fromTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // Native ETH
-  slippagePercent: 0.05,
-  userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
-})
+// sendGetRequest('/api/v6/dex/aggregator/swap', {
+//   chainIndex: 1,
+//   amount: 10000000000000,
+//   toTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc on base
+//   fromTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // Native ETH
+//   slippagePercent: 0.05,
+//   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
+// })
 
 setTimeout(() => {
-  sendGetRequest('/api/v6/dex/aggregator/swap', {
-    chainIndex: 1,
-    amount: 100000000,
-    toTokenAddress: '0x55d398326f99059ff775485246999027b3197955', // USDT 
-    fromTokenAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
-    slippagePercent: 0.05,
-    userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
-  })
+  // sendGetRequest('/api/v6/dex/aggregator/swap', {
+  //   chainIndex: 1,
+  //   amount: 100000000,
+  //   toTokenAddress: '0x55d398326f99059ff775485246999027b3197955', // USDT 
+  //   fromTokenAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
+  //   slippagePercent: 0.05,
+  //   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
+  // })
 }, 2000)
