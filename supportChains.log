@@ -1,0 +1,57 @@
+链	兑换 API	ChainIndex
+Ethereum Mainnet	已支持	1
+OP Mainnet	已支持	10
+BNB Smart Chain Mainnet	已支持	56
+Sonic	已支持	146
+Uni Chain	已支持	130
+X layer	已支持	196
+Polygon Mainnet	已支持	137
+Arbitrum One	已支持	42161
+Avalanche C-Chain	已支持	43114
+zkSync Era Mainnet	已支持	324
+Polygon zkEVM	已支持	1101
+Base	已支持	8453
+Linea	已支持	59144
+Fantom Opera	已支持	250
+Mantle	已支持	5000
+Conflux eSpace	已支持	1030
+Metis Andromeda Mainnet	已支持	1088
+Merlin Chain	已支持	4200
+Blast	已支持	81457
+Manta Pacific Mainnet	已支持	169
+Scroll	已支持	534352
+Cronos Mainnet	已支持	25
+ZetaChain Mainnet	已支持	7000
+Plasma	已支持	9745
+Monad	已支持	143
+
+
+
+链	兑换 API	ChainIndex
+Tron	已支持	195
+Solana	已支持	501
+SUI	已支持	784
+Ton	已支持	607
+
+
+网络	ChainId	主网币合约地址
+Ethereum	1	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Solana	501	11111111111111111111111111111111
+Arbitrum	42161	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Base	8453	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Sonic	146	0x4Efa4b8545a3a77D80Da3ECC8F81EdB1a4bda783
+Optimism	10	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+zkSync Era	324	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+BNB Chain	56	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Linea	59144	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Polygon	137	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Avalanche C	43114	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Mantle	5000	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Scroll	534352	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+X layer	196	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+Blast	81457	0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
+
+
+默认币对配置#
+tokenPair: 如果没有配置，则单链兑换将默认设置在 Ethereum 网络，且 fromToken 为 ETH，toToken 为 USDC。
+bridgeTokenPair: 如果没有配置，则跨链兑换将默认设置为从 Ethereum 跨链至 BNB Chain，且 fromToken 为 ETH，toToken 为 BNB。

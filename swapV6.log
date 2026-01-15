@@ -1,0 +1,311 @@
+兑换#
+通过 DEX 聚合器 router 获取兑换所需的交易数据。
+
+注意
+Uni v3 池子兑换存在以下场景：
+如果池子内，想要兑换的币对流动性被抽空，池子将仅消耗部分支付币种，产生剩余。OKX DEX Router 作为完全去中心化的智能合约将自动退回您的剩余。
+您集成过程中，注意兼容该情况，为您的合约设置支持币种退回，保障您用户的使用。
+请求地址#
+GET https://web3.okx.com/api/v6/dex/aggregator/swap
+
+请求参数#
+参数	类型	必传	描述
+chainIndex	String	是	链的唯一标识。
+如501: Solana，更多可查看这里。
+amount	String	是	交易数量。如果 swapMode 为 exactIn，代表卖出币种数量
+如果 swapMode 为 exactOut，代表买入币种数量
+(数量需包含精度，如兑换 1.00 USDT 需输入 1000000，兑换 1.00 DAI 需输入 1000000000000000000)，币种精度可通过币种列表取得。
+swapMode	String	是	交易模式。可选值为：exactIn 或 exactOut。
+默认值为：exactIn。
+当设为 exactOut 时，适用于需要获取确切输出金额的使用场景。
+
+注意：
+1. ExactOut 功能目前仅支持 Ethereum、Base、BSC、Arbitrum 链。
+2. ExactOut 功能目前仅支持 Uni v2 和 v3 协议。
+3. 在此模式下，滑点设置作用于输入代币。
+4. ExactOut 功能目前仅支持 v5版本 DEX API
+fromTokenAddress	String	是	卖出币种合约地址 (如：0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee)
+toTokenAddress	String	是	买入币种合约地址 (如：0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+slippagePercent	String	是	滑点限制。
+注意：
+1. 在 EVM 网络上，滑点最小值为 0，最大值为 100。
+2. 在 Solana 网络上，滑点最小值为 0，最大值需小于 100。
+（如：0.5代表这笔交易的最大滑点为0.5%）
+userWalletAddress	String	是	用户钱包地址 (如：0x3f6a3f57569358a512ccc0e513f171516b0fd42a)
+swapReceiverAddress	String	否	购买的资产的收件人地址 如果未设置，则用户钱包地址收到购买的资产 (如：0x3f6a3f57569358a512ccc0e513f171516b0fd42a)
+feePercent	String	否	发送到分佣地址的询价或者目标币种数量百分比。
+最小百分比 > 0，
+Solana 链最大百分比：10。 其他链最大百分比：3
+最多支持小数点后 9 位，系统将自动忽略超出的部分。
+fromTokenReferrerWalletAddress	String	否	收取 fromToken 分佣费用的钱包地址。
+使用 API 时，需要结合 feePercent 设置佣金比例，且单笔交易只能选择 fromToken 分佣或 toToken 分佣。
+
+注意:
+1.对于 Solana:分佣地址需提前存入一些 SOL 进行激活。
+2.对于 TON:支持经过 Stonfi V2 和 Dedust 流动性池交易的分佣，不支持经过 Stonfi V1 流动性池交易的分佣。
+3. 对于 BSC 链：不支持通过 Four.meme 进行 Swap 的佣金分成。
+toTokenReferrerWalletAddress	String	否	收取 toToken 分佣费用的钱包地址。
+使用 API 时，需要结合 feePercent 设置佣金比例，且单笔交易只能选择 fromToken 分佣或 toToken 分佣。
+
+注意:
+1.对于 Solana:分佣地址需提前存入一些 SOL 进行激活。
+2.对于 TON:仅支持经过 Stonfi V2 流动性池交易的分佣。
+3. 对于BSC 链：不支持通过 Four.meme 进行 Swap 的佣金分成。
+positiveSlippagePercent	String	否	此功能仅对 白名单或者企业用户开放 ,如您想使用，请联系 dexapi@okx.com
+设置后将能对报价改善部分收取一定费用，该费用不超过报价总额的 10%，该上限是可配置的，可通过自定义百分比参数进行修改。
+
+百分比参数默认设置为 0。最小百分比：0，最大百分比：10 最多支持小数点后 1 位。
+
+目前该参数仅支持 Solana 链
+positiveSlippageFeeAddress	string	否	此功能仅对 白名单或者企业用户开放 ,如您想使用，请联系 dexapi@okx.com
+收取正滑点分佣费用的钱包地址。 使用时需要结合 positiveSlippagePercent 设置比例。若填入，所有正滑点收益将转至該地址，若未填入则使用收取分佣费用的钱包地址。
+gaslimit	String	否	Gas (以最小单位表示：wei) 费用限额 (如果该值太低，无法实现报价，则会返回错误信息)。
+仅适用于 EVM。
+gasLevel	String	否	Gas价格等级 (默认为 average,交易消耗gas价格水平，可设置为 average、fast 或 slow)
+dexIds	String	否	限定询价的流动性池 dexId , 多个组合按 , 分隔 (如 1,50,180 ，更多可查看流动性列表)
+directRoute	Boolean	否	默认设置为 false。启用后，将限制路由仅使用单一流动性池。当前，该功能仅适用于 Solana 兑换。
+callDataMemo	String	否	你可以自定义 callData 中上链携带的参数，将想要带到链上的数据编码成长度固定为 64 bytes、128 个字符长度的 16 进制字符串。例如，“0x...111”，字符串中需要保留“0x”开头。
+computeUnitPrice	String	否	用于 Solana 网络上的交易，类似于 Ethereum 上的 gasPrice，这个价格决定了交易的优先级，价格越高意味着交易越有可能更快地被网络处理。
+computeUnitLimit	String	否	用于 Solana 网络上的交易，可类比为 Ethereum 上的的 gasLimit，这个限制可以确保交易不会占用过多的计算资源。
+如果参数tips不为0，那computeUnitPrice 应该设置成0。否则浪费手续费
+tips	String	否	Jito tips，单位为SOL。 最大为"2"，最小为"0.0000000001". 这用于MEV 保护,指定tips 获取了call data，调用广播交易API 即可。
+dexIds	String	否	限定询价的流动性池 dexId , 多个组合按 , 分隔 (如 1,50,180 ，更多可查看流动性列表)
+excludeDexIds	String	否	限定不会使用於询价的流动性池 dexId，多个组合按,分隔 (如 1,50,180 ，更多可查看流动性列表)
+disableRFQ	String	否	禁用所有被归类为 RFQ 且依赖时效性报价的流动性来源。默认设置为 false。
+directRoute	Boolean	否	默认设置为 false。启用后，将限制路由仅使用单一流动性池。当前，该功能仅适用于 Solana 兑换。
+priceImpactProtectionPercent	String	否	(默认值为 90%) 允许的价格影响百分比 (介于 0 和 100 之间)。
+当用户设置了 priceImpactProtectionPercent 后，如果估算的价格影响超过了指定的百分比，将会返回一个错误。例如，如果 priceImpactProtectionPercent = 25，任何价格影响高于 25% 的报价都将返回错误。
+当百分比被设置为 100 时，此功能将被禁用，也就是说，每一笔交易都会被允许通过。
+
+注意：当我们无法计算价格影响时，我们会返回 null，并且价格影响保护也会被禁用。
+autoSlippage	Boolean	否	默认为 false。当设置为 true 时，原 slippagePercent 参数（如果有传入）将会被 autoSlippage 覆盖，将基于当前市场数据计算并设定自動滑点。
+maxAutoslippagePercent	String	否	当 autoSlippage 设置为 true 时，此值为 API 所返回的 autoSlippage 的最大上限，建议采用此值以控制风险。
+
+
+
+响应参数#
+参数	类型	描述
+routerResult	Object	询价路径数据对象
+chainIndex	String	否
+fromTokenAmount	String	询价币种的兑换数量 (如：500000000000000000000000)
+toTokenAmount	String	目标币种的兑换数量 (如：168611907733361)
+tradeFee	String	询价路径预估消耗的网络费用 (USD 计价)
+estimateGasFee	String	预估消耗的 gas，各个链的最小单位返回，例如 wei
+dexRouterList	Array	询价路径数据集合
+router	String	代币兑换的主路径
+dexProtocol	Object	兑换路径中执行的 DEX 协议
+dexName	String	DEX 协议名称 (如：Verse)
+percent	String	一条路径中单一 DEX 协议的兑换资产占所有 DEX 协议百分比 (如：100)
+fromToken	Object	询价币种信息
+fromTokenIndex	String	Token Index 表示在路由过程中 fromToken 的索引
+tokenContractAddress	String	币种合约地址 (如：0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+tokenSymbol	String	币种简称 (如：USDC)
+tokenUnitPrice	String	该接口返回的币种单价是基于链上的实时美元价格。注：此价格仅为推荐价格，在一些特殊情况中，币种单价可能为 null
+decimal	String	币种精度定义了单个的该币种可以被分成多少份的最小单位。例如，如果一个币种的精度是 8，则表示单个的这种代币可以被分成 100,000,000 份的最小单位。注意：该参数仅供参考，币种精度会随着合约拥有者的设置改变等原因发生变化。
+isHoneyPot	Boolean	代币是否为貔貅币。 是：true 否：false
+taxRate	String	代币卖出税率，适用于可设定税费机制的代币（如SafeMoon、SPL2022代币）。普通代币无税费时返回 0。取值为 最小：0 最大：1，0.01表示1%。
+toTokenIndex	String	Token Index 表示在路由过程中 toToken 的索引
+toToken	Object	目标币种信息
+tokenContractAddress	String	币种合约地址 (如：0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+tokenSymbol	String	币种简称 (如：USDC)
+tokenUnitPrice	String	该接口返回的币种单价是一个结合了链上、交易所以及其他第三方来源数据的综合美元价格。注：此价格仅为推荐价格，在一些特殊情况中，币种单价可能为 null
+decimal	String	币种精度定义了单个的该币种可以被分成多少份的最小单位。例如，如果一个币种的精度是 8，则表示单个的这种代币可以被分成 100,000,000 份的最小单位。注意：该参数仅供参考，币种精度会随着合约拥有者的设置改变等原因发生变化。
+isHoneyPot	Boolean	代币是否为貔貅币。 是：true 否：false
+taxRate	String	代币买入税率，适用于可设定税费机制的代币（如SafeMoon、SPL2022代币）。普通代币无税费时返回 0。取值为 最小：0 最大：1，0.01表示1%。
+priceImpactPercent	String	Percentage = (接收价值 – 支付价值) / 支付价值。因为当前兑换数量影响了流动性池深度，导致产生了价值差额。若接收价值大于支付价值，Percentage 有可能是正数。
+tx	Object	发交易信息
+signatureData	Array	如果返回此参数，则代表该交易需要额外的签名数据。开发者应将此参数作为交易签名的输入之一，并确保其在签名过程中正确应用。
+当你指定了tips 请求参数，此参数值表jito tips 转账的calldata。用它来广播交易，参考此API
+from	String	用户钱包地址 (如：0x3f6a3f57569358a512ccc0e513f171516b0fd42a)
+gas	String	gas 费限值的估计值，在 gasprice 基础上增加 50%，以 10 进制标准格式返回。 (如：1173250)。
+为了获取准确的数据，请查看 /gas-limit 接口
+gasPrice	String	以 wei 为单位的 gas price ，以 10 进制标准格式返回。(如：58270000000)
+maxPriorityFeePerGas	String	EIP-1559:每单位 gas 优先费用的推荐值 (如：500000000)
+to	String	欧易 DEX router 合约地址 (如：0x3b3ae790Df4F312e745D270119c6052904FB6790)
+value	String	与合约交互的主链币数量，以 10 进制标准格式最小单位返回 (wei) (如：0)
+maxSpendAmount	String	达到滑点上限时可花费的询价代币最大数量（适用于 exactOut 模式）。
+minReceiveAmount	String	目标币种的最小兑换数量 (兑换价格达到滑点限制的极限值时，目标币种的兑换数量，如：900645839798)
+data	String	Call data
+slippagePercent	String	当前交易的滑点值
+
+// V5 curl --location --request GET 'https://web3.okx.com/api/v5/dex/aggregator/swap?chainIndex=1&amount=10000000000000&toTokenAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&fromTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&slippage=0.05&userWalletAddress=0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
+// V6 curl --location --request GET 'https://web3.okx.com/api/v6/dex/aggregator/swap?chainIndex=1&amount=10000000000000&toTokenAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&fromTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&slippagePercent=0.5&userWalletAddress=0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8' \
+
+--header 'OK-ACCESS-KEY: 37c541a1-****-****-****-10fe7a038418' \
+--header 'OK-ACCESS-SIGN: leaV********3uw=' \
+--header 'OK-ACCESS-PASSPHRASE: 1****6' \
+--header 'OK-ACCESS-TIMESTAMP: 2023-10-18T12:21:41.274Z'
+
+{
+  "code": "0",
+  "data": [
+    {
+      "routerResult": {
+        "chainIndex": "56",
+        "contextSlot": 0,
+        "dexRouterList": [
+          {
+            "dexProtocol": {
+              "dexName": "Uniswap V3",
+              "percent": "100"
+            },
+            "fromToken": {
+              "decimal": "18",
+              "isHoneyPot": false,
+              "taxRate": "0",
+              "tokenContractAddress": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+              "tokenSymbol": "WBNB",
+              "tokenUnitPrice": "1003.912819259131997365"
+            },
+            "fromTokenIndex": "0",
+            "toToken": {
+              "decimal": "18",
+              "isHoneyPot": false,
+              "taxRate": "0",
+              "tokenContractAddress": "0x55d398326f99059ff775485246999027b3197955",
+              "tokenSymbol": "USDT",
+              "tokenUnitPrice": "1.001434208940503979"
+            },
+            "toTokenIndex": "1"
+          }
+        ],
+        "estimateGasFee": "135000",
+        "fromToken": {
+          "decimal": "18",
+          "isHoneyPot": false,
+          "taxRate": "0",
+          "tokenContractAddress": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+          "tokenSymbol": "WBNB",
+          "tokenUnitPrice": "1003.912819259131997365"
+        },
+        "fromTokenAmount": "100000000000",
+        "priceImpactPercent": "0.1",
+        "router": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c--0x55d398326f99059ff775485246999027b3197955",
+        "swapMode": "exactIn",
+        "toToken": {
+          "decimal": "18",
+          "isHoneyPot": false,
+          "taxRate": "0",
+          "tokenContractAddress": "0x55d398326f99059ff775485246999027b3197955",
+          "tokenSymbol": "USDT",
+          "tokenUnitPrice": "1.001434208940503979"
+        },
+        "toTokenAmount": "100347964355860",
+        "tradeFee": "0.014928705"
+      },
+      "tx": {
+        "data": "0x0d5f0e3b000000000000000000032e64fefef0f2ecf7b2f0aef87bdbf0eb93a26fffe7aa000000000000000000000000000000000000000000000000000000174876e80000000000000000000000000000000000000000000000000000005a5a70b8bf6d000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000018000000000000000000000006fe9e9de56356f7edbfcbb29fab7cd69471a4869",
+        "from": "0xfefef0f2ecf7b2f0aef87bdbf0eb93a26fffe7aa",
+        "gas": "202500",
+        "gasPrice": "110000000",
+        "maxPriorityFeePerGas": "110000000",
+        "maxSpendAmount": "100000000000",
+        "minReceiveAmount": "99344484712301",
+        "signatureData": [
+          ""
+        ],
+        "slippagePercent": "0.5",
+        "to": "0xF4858d71e5d7D27e3F7270390Cd57545DcA35aa9",
+        "value": "0"
+      }
+    }
+  ],
+  "msg": ""
+}
+
+
+// getSwapData
+{
+  routerResult: {
+    chainIndex: "1",
+    contextSlot: 24237047,
+    dexRouterList: [
+      {
+        dexProtocol: {
+          dexName: "Unicly",
+          percent: "100",
+        },
+        fromToken: {
+          decimal: "18",
+          isHoneyPot: false,
+          taxRate: "0",
+          tokenContractAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          tokenSymbol: "WETH",
+          tokenUnitPrice: "3324.2",
+        },
+        fromTokenIndex: "0",
+        toToken: {
+          decimal: "6",
+          isHoneyPot: false,
+          taxRate: "0",
+          tokenContractAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+          tokenSymbol: "USDT",
+          tokenUnitPrice: "0.99982",
+        },
+        toTokenIndex: "1",
+      },
+      {
+        dexProtocol: {
+          dexName: "DODO V2",
+          percent: "100",
+        },
+        fromToken: {
+          decimal: "6",
+          isHoneyPot: false,
+          taxRate: "0",
+          tokenContractAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+          tokenSymbol: "USDT",
+          tokenUnitPrice: "0.99982",
+        },
+        fromTokenIndex: "1",
+        toToken: {
+          decimal: "6",
+          isHoneyPot: false,
+          taxRate: "0",
+          tokenContractAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          tokenSymbol: "USDC",
+          tokenUnitPrice: "0.99967",
+        },
+        toTokenIndex: "2",
+      },
+    ],
+    estimateGasFee: "408000",
+    fromToken: {
+      decimal: "18",
+      isHoneyPot: false,
+      taxRate: "0",
+      tokenContractAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      tokenSymbol: "ETH",
+      tokenUnitPrice: "3324.2",
+    },
+    fromTokenAmount: "100000000000000",
+    priceImpactPercent: "0.93",
+    router: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee--0xdac17f958d2ee523a2206206994597c13d831ec7--0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    swapMode: "exactIn",
+    toToken: {
+      decimal: "6",
+      isHoneyPot: false,
+      taxRate: "0",
+      tokenContractAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      tokenSymbol: "USDC",
+      tokenUnitPrice: "0.99967",
+    },
+    toTokenAmount: "335635",
+    tradeFee: "0.539680779662344",
+  },
+  tx: {
+    data: "0xf2c426960000000000000000000000000000000000000000000000000000000000035418000000000000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee000000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb4800000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000000000000518840000000000000000000000000000000000000000000000000000000069685ebd00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000022000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc20000000000000000000000000000000000000000000000000000000000000001000000000000000000000000031f1ad10547b8deb43a36e5491c06a93812023a00000000000000000000000000000000000000000000000000000000000000010000000000000000000000003bc6b9602568c1088a29a888f9661f57757e349f00000000000000000000000000000000000000000000000000000000000000010000000000000000000127103bc6b9602568c1088a29a888f9661f57757e349f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e00000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000160000000000000000000000000dac17f958d2ee523a2206206994597c13d831ec7000000000000000000000000000000000000000000000000000000000000000100000000000000000000000056bd269db96a089295d742351ba459fb0c279fe20000000000000000000000000000000000000000000000000000000000000001000000000000000000000000b9a4406982d990648093c71eff9f1f63a040152e0000000000000000000000000000000000000000000000000000000000000001000000000000000001022710b9a4406982d990648093c71eff9f1f63a040152e00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000007777777711118000000000000000000000000000000000000000000000051f13777777771111000000000064fa00a9ed787f3793db668bff3e6e6e7db0f92a1b",
+    from: "0x34aabb238177ef195ed90fea056edd6648732014",
+    gas: "408000",
+    gasPrice: "630703923",
+    maxPriorityFeePerGas: "500000000",
+    maxSpendAmount: "",
+    minReceiveAmount: "333956",
+    signatureData: [
+      "",
+    ],
+    slippagePercent: "0.5",
+    to: "0x5E1f62Dac767b0491e3CE72469C217365D5B48cC",
+    value: "100000000000000",
+  },
+}
