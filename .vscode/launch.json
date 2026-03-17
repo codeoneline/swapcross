@@ -7,12 +7,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "quick2",
+      "name": "quick-https-proxy",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceFolder}/quick2.js",
+      "program": "${workspaceFolder}/quick-https-proxy.js",
       "envFile": "${workspaceFolder}/.env"
     },
     {
@@ -24,7 +24,8 @@
       ],
       "cwd": "${workspaceRoot}",
       "program": "${workspaceFolder}/okx-swap-claude.js",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "args": ["execute"]
     },
     {
       "type": "node",

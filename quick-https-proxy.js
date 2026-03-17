@@ -136,13 +136,13 @@ function sendPostRequest(request_path, params) {
 // // ?chainIndex=42161&amount=1000000000000&toTokenAddress=0xff970a61a04b1ca14834a43f5de4533ebddb5cc8&fromTokenAddress=0x82aF49447D8a07e3bd95BD0d56f35241523fBab1
 // sendGetRequest(getRequestPath, getParams);
 
-// // POST 请求示例
-// const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
-// // {"slug":"sats"}
-// const postParams = {
-//   'slug': 'sats'
-// };
-// sendPostRequest(postRequestPath, postParams);
+// POST 请求示例
+const postRequestPath = '/api/v5/mktplace/nft/ordinals/listings';
+// {"slug":"sats"}
+const postParams = {
+  'slug': 'sats'
+};
+sendPostRequest(postRequestPath, postParams);
 
 
 // sendGetRequest('/api/v6/dex/aggregator/supported/chain', {chainIndex: 1})
@@ -176,12 +176,12 @@ setTimeout(() => {
   //   userWalletAddress: '0x6f9ffea7370310cd0f890dfde5e0e061059dcfb8'
   // })
 
-  sendGetRequest('/api/v6/dex/aggregator/swap', {
-    chainIndex: 1,
-    amount: 100000000000000,
-    fromTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
-    toTokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDT 
-    slippagePercent: 0.05,
-    userWalletAddress: '0x34aABB238177eF195ed90FEa056Edd6648732014'
-  })
+  // sendGetRequest('/api/v6/dex/aggregator/swap', {
+  //   chainIndex: 1,
+  //   amount: 100000000000000,
+  //   fromTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+  //   toTokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDT 
+  //   slippagePercent: 0.05,
+  //   userWalletAddress: '0x34aABB238177eF195ed90FEa056Edd6648732014'
+  // })
 }, 2000)

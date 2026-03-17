@@ -12,7 +12,7 @@ const agent = new HttpsProxyAgent(proxyUrl);
 dotenv.config();
 
 // Connect to Base network
-const web3 = new Web3(process.env.EVM_RPC_URL || 'https://mainnet.base.org');
+const web3 = new Web3(process.env.EVM_RPC_URL);
 
 // Your wallet information - REPLACE WITH YOUR OWN VALUES
 const WALLET_ADDRESS = process.env.EVM_WALLET_ADDRESS || '';
@@ -280,52 +280,30 @@ async function broadcastTransaction(signedTx, chainIndex, walletAddress) {
 const { Common } = require('@ethereumjs/common');
 const { Transaction } = require('@ethereumjs/tx');
 
-async function signTransactionOffline(txData, privateKey, chainId) {
+async function signTransactionOffline(tx, privateKey, chainId) {
     // 创建链配置
     const common = Common.custom({ chainId: chainId });
-    
-    // 确保所有数值字段都是十六进制字符串
-    const gasLimitHex = web3.utils.toHex(txData.gas);
-    const valueHex = web3.utils.toHex(txData.value || '0x0');
-    const nonceHex = web3.utils.toHex(txData.nonce);
-    
-    // 对于 EIP-1559 交易，需要转换这些字段
-    const maxFeePerGasHex = txData.maxFeePerGas ? web3.utils.toHex(txData.maxFeePerGas) : undefined;
-    const maxPriorityFeePerGasHex = txData.maxPriorityFeePerGas ? web3.utils.toHex(txData.maxPriorityFeePerGas) : undefined;
-    
     // 构建交易对象
     const txParams = {
-        nonce: nonceHex,
-        gasLimit: gasLimitHex,
-        to: txData.to,
-        value: valueHex,
-        data: txData.data,
+        nonce: '0x' + Number(tx.nonce).toString(16),
+        gasLimit: '0x' + Number(tx.gas).toString(16),
+        to: tx.to,
+        value: '0x' + BigInt(tx.value).toString(16),
+        data: tx.data,
         chainId: chainId,
-        type: 2  // EIP-1559
+        type: 2,  // EIP-1559,
+        maxFeePerGas: '0x' + BigInt(tx.maxFeePerGas).toString(16),
+        maxPriorityFeePerGas: '0x' + BigInt(tx.maxPriorityFeePerGas).toString(16)
     };
-    
-    // 添加 EIP-1559 特定字段
-    if (maxFeePerGasHex) {
-        txParams.maxFeePerGas = maxFeePerGasHex;
-    }
-    if (maxPriorityFeePerGasHex) {
-        txParams.maxPriorityFeePerGas = maxPriorityFeePerGasHex;
-    }
-    
-    // 如果没有 EIP-1559 字段，回退到传统 gasPrice
-    if (!maxFeePerGasHex && txData.gasPrice) {
-        delete txParams.type;
-        txParams.gasPrice = web3.utils.toHex(txData.gasPrice);
-    }
-    
+
     console.log('Transaction params for signing:', JSON.stringify(txParams, null, 2));
     
     // 创建交易对象
-    const tx = Transaction.fromTxData(txParams, { common });
+    const txObj = Transaction.fromTxData(txParams, { common });
     
     // 签名
     const privateKeyBuffer = Buffer.from(privateKey.replace('0x', ''), 'hex');
-    const signedTx = tx.sign(privateKeyBuffer);
+    const signedTx = txObj.sign(privateKeyBuffer);
     
     // 返回序列化的交易
     const rawTransaction = '0x' + signedTx.serialize().toString('hex');
@@ -358,12 +336,13 @@ async function executeSwap(
         // console.log('Simulation result', simulationResult.intention);
 
         // Step 3: Get gas limit
-        const gasLimit = await getGasLimit(
-            swapData.tx.from,
-            swapData.tx.to,
-            swapData.tx.value || '0',
-            swapData.tx.data
-        );
+        // const gasLimit = await getGasLimit(
+        //     swapData.tx.from,
+        //     swapData.tx.to,
+        //     swapData.tx.value,
+        //     swapData.tx.data
+        // );
+        const gasLimit = swapData.tx.gas
 
 
 
@@ -388,19 +367,20 @@ async function executeSwap(
         // };
         
         // Step 5: Get current gas price
-        const feeData = await web3.eth.calculateFeeData();
-        console.log(`Max Fee Per Gas: ${web3.utils.fromWei(feeData.maxFeePerGas, 'gwei')} gwei`);
-        console.log(`Max Priority Fee: ${web3.utils.fromWei(feeData.maxPriorityFeePerGas, 'gwei')} gwei`);
+        // const feeData = await web3.eth.calculateFeeData();
+        // console.log(`Max Fee Per Gas: ${web3.utils.fromWei(feeData.maxFeePerGas, 'gwei')} gwei`);
+        // console.log(`Max Priority Fee: ${web3.utils.fromWei(feeData.maxPriorityFeePerGas, 'gwei')} gwei`);
+        // feeData.maxPriorityFeePerGas = 10000000
         // Step 6: Build transaction
         const transaction = {
             from: swapData.tx.from,
             to: swapData.tx.to,
             data: swapData.tx.data,
-            value: swapData.tx.value || '0x0',
-            gas: gasLimit,
-            // gasPrice: gasPrice.toString(),
-            maxFeePerGas: feeData.maxFeePerGas.toString(),
-            maxPriorityFeePerGas: feeData.maxPriorityFeePerGas.toString(),
+            value: swapData.tx.value,
+            gas: swapData.tx.gas,
+            // gasPrice: swapData.tx.gasPrice,
+            maxFeePerGas: (BigInt(swapData.tx.gasPrice) * 2n).toString(), //feeData.maxFeePerGas.toString(),
+            maxPriorityFeePerGas: (BigInt(swapData.tx.maxPriorityFeePerGas) * 2n).toString(),//feeData.maxPriorityFeePerGas.toString(),
             nonce: Number(nonce),
             // chainIndex: parseInt(chainIndex)
             chainId: parseInt(chainIndex),
@@ -657,11 +637,14 @@ async function main() {
         const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'; // WETH on ETH
         const USDT_ADDRESS = '0xdac17f958d2ee523a2206206994597c13d831ec7'; // USDD on ETH
         const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'; // USDC on ETH
-        const fromToken = ETH_ADDRESS;
         // const toToken = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC on Base
-        const toToken = USDC_ADDRESS; // USDC on Base
-        const amount = '100000000000000'; // 0.0001 ETH in wei
-        const slippagePercent = '0.5'; // 0.5%
+        // const fromToken = ETH_ADDRESS;
+        // const toToken = USDC_ADDRESS; // USDC on Base
+        // const amount = '100000000000000'; // 0.0001 ETH in wei
+        const fromToken = USDC_ADDRESS; // USDC on Base
+        const toToken = USDT_ADDRESS; 
+        const amount = '1000000'; // 1 usdc in wei
+        const slippagePercent = '1'; // 0.5%
 
         console.log('\nConfiguration:');
         console.log(`   From: ${fromToken} (ETH)`);
