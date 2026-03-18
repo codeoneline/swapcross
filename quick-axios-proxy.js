@@ -328,7 +328,7 @@ async function main() {
     // 注意：金额需要转换为 wei 单位
     // 1 USDT = 1000000 (USDT是6位小数)
     // 10 USDT = 10000000
-    const amountToSwap = '10'; // 兑换10 USDT
+    const amountToSwap = '1'; // 兑换10 USDT
     
     console.log('\n========================================');
     console.log(`开始兑换: ${amountToSwap} USDT -> USDC`);

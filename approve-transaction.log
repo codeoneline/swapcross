@@ -1,0 +1,43 @@
+交易授权#
+根据 ERC-20 Token
+标准，在执行兑换交易前用户需要授权欧易 DEX router 对其钱包进行资产操作，此接口提供发起授权交易前所需要的交易信息。
+
+请求地址#
+GET https://web3.okx.com/api/v6/dex/aggregator/approve-transaction
+
+请求参数#
+参数	类型	必传	描述
+chainIndex	String	是	链的唯一标识。
+如1: Ethereum，更多可查看这里。
+tokenContractAddress	String	是	币种合约地址 (如0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+approveAmount	String	是	执行授权的币种数量
+(数量需包含精度，如授权 1.00 USDT 需输入 1000000，授权 1.00 DAI 需输入 1000000000000000000)
+
+响应参数#
+参数	类型	描述
+data	String	Call data
+dexContractAddress	String	欧易 DEX approve 合约地址 (如0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+gasLimit	String	Gas limit (如50000)。
+为了获取准确的数据，请查看 /gas-limit 接口
+gasPrice	String	以 wei 为单位的 gas price (如110000000)
+
+curl --location --request GET 'https://web3.okx.com/api/v6/dex/aggregator/approve-transaction?chainIndex=1&tokenContractAddress=0x6f9ffea7370310cd0f890dfde5e0e061059dcfd9&approveAmount=1000000' \
+
+--header 'OK-ACCESS-KEY: 37c541a1-****-****-****-10fe7a038418' \
+--header 'OK-ACCESS-SIGN: leaV********3uw=' \
+--header 'OK-ACCESS-PASSPHRASE: 1****6' \
+--header 'OK-ACCESS-TIMESTAMP: 2023-10-18T12:21:41.274Z'
+
+
+{
+ "code": "0",
+ "data": [
+   {
+     "data": "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240",
+     "dexContractAddress": "0xc67879F4065d3B9fe1C09EE990B891Aa8E3a4c2f",
+     "gasLimit": "50000",
+     "gasPrice": "110000000"
+   }
+ ],
+ "msg": ""
+}

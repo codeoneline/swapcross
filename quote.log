@@ -1,0 +1,395 @@
+获取兑换价格#
+通过 DEX 聚合器获取最优报价。
+
+请求地址#
+GET https://web3.okx.com/api/v6/dex/aggregator/quote
+
+请求参数#
+参数	类型	必传	描述
+chainIndex	String	是	链的唯一标识。
+如1: Ethereum，更多可查看这里。
+amount	String	是	交易数量。 如果 swapMode 为 exactIn，代表卖出币种数量
+如果 swapMode 为 exactOut，代表买入币种数量。(数量需包含精度，如兑换 1.00 USDT 需输入 1000000，兑换 1.00 DAI 需输入 1000000000000000000)，币种精度可通过币种列表取得。
+swapMode	String	是	交易模式。可选值为：exactIn 或 exactOut。
+默认值为：exactIn。
+当设为 exactOut 时，适用于需要获取确切输出金额的使用场景。
+
+注意：
+1. ExactOut 功能目前仅支持 Ethereum、Base、BSC、Arbitrum 链。
+2. ExactOut 功能目前仅支持 Uni v2 和 v3 协议。
+3. 在此模式下，滑点设置作用于输入代币。
+fromTokenAddress	String	是	卖出币种合约地址 (如0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee)
+toTokenAddress	String	是	买入币种合约地址 (如0xa892e1fef8b31acc44ce78e7db0a2dc610f92d00)
+dexIds	String	否	限定询价的流动性池 dexId , 多个组合按 , 分隔 (如 1,50,180 ，更多可查看流动性列表)
+directRoute	Boolean	否	默认设置为 false。启用后，将限制路由仅使用单一流动性池。当前，该功能仅适用于 Solana 兑换。
+priceImpactProtectionPercent	String	否	(可选，默认值为 90%) 允许的价格影响百分比 (介于 0 和 100 之间)。
+当用户设置了 priceImpactProtectionPercent 后，如果估算的价格影响超过了指定的百分比，将会返回一个错误。例如，如果 priceImpactProtectionPercent = 25，任何价格影响高于 25% 的报价都将返回错误。
+这是一个可选开启的功能，默认值为 90。当百分比被设置为 100 时，此功能将被禁用，也就是说，每一笔交易都会被允许通过。
+
+注意：当我们无法计算价格影响时，我们会返回 null，并且价格影响保护也会被禁用。
+feePercent	String	否	发送到分佣地址的询价或者目标币种数量百分比。
+最小百分比 > 0，
+Solana 链最大百分比：10。 其他链最大百分比：3
+最多支持小数点后 9 位，系统将自动忽略超出的部分。
+响应参数#
+参数	类型	描述
+chainIndex	String	链的唯一标识。
+dexRouterList	Array	询价路径数据集合
+fromTokenAmount	String	询价币种的兑换数量 (如500000000000000000000009)
+toTokenAmount	String	目标币种的兑换数量 (如168611907733361)
+tradeFee	String	询价路径预估消耗的网络费用 (USD 计价)
+estimateGasFee	String	预估消耗的 gas，各个链的最小单位返回，例如 wei
+router	String	币种兑换的一条路径
+dexProtocol	Object	兑换路径中执行的 DEX 协议 (如Verse)
+percent	String	一条路径中单一 DEX 协议的兑换资产占所有 DEX 协议百分比 (如100)
+dexName	String	DEX 协议名称
+fromToken	Object	询价币种信息
+tokenContractAddress	String	币种合约地址 (如0xa892e1fef8b31acc44ce78e7db0a2dc610f92d00)
+tokenSymbol	String	币种简称 (如WETH)
+tokenUnitPrice	String	该接口返回的币种单价是一个结合了链上、交易所以及其他第三方来源数据的综合美元价格。注：此价格仅为推荐价格，在一些特殊情况中，币种单价可能为 null
+decimal	String	币种精度定义了单个的该币种可以被分成多少份的最小单位。例如，如果一个币种的精度是 8，则表示单个的这种代币可以被分成 100,000,000 份的最小单位。注意：该参数仅供参考，币种精度会随着合约拥有者的设置改变等原因发生变化。
+isHoneyPot	Boolean	代币是否为貔貅币。 是：true 否：false
+taxRate	String	代币卖出税率，适用于可设定税费机制的代币（如SafeMoon、SPL2022代币）。普通代币无税费时返回 0。取值为 最小：0 最大：1，0.01表示1%。
+toToken	Object	路径中目标币种信息
+tokenContractAddress	String	币种合约地址 (如0xa892e1fef8b31acc44ce78e7db0a2dc610f92d00)
+tokenSymbol	String	币种简称 (如WETH)
+tokenUnitPrice	String	该接口返回的币种单价是一个基于链上的实时美元价格。注：此价格仅为推荐价格，在一些特殊情况中，币种单价可能为 null
+decimal	String	币种精度定义了单个的该币种可以被分成多少份的最小单位。例如，如果一个币种的精度是 8，则表示单个的这种代币可以被分成 100,000,000 份的最小单位。注意：该参数仅供参考，币种精度会随着合约拥有者的设置改变等原因发生变化。
+isHoneyPot	Boolean	代币是否为貔貅币。 是：true 否：false
+taxRate	String	代币买入税率，适用于可设定税费机制的代币（如SafeMoon、SPL2022代币）。普通代币无税费时返回 0。取值为 最小：0 最大：1，0.01表示1%。
+dexName	String	询价路径 DEX 名称
+dexLogo	String	DEX 协议名称
+tradeFee	String	询价路径预估消耗的网络费用 (USD 计价)
+amountOut	String	询价路径的接收数量
+priceImpactPercent	String	Percentage = (接收价值 – 支付价值) / 支付价值。因为当前兑换数量影响了流动性池深度，导致产生了价值差额。若接收价值大于支付价值，Percentage 有可能是正数。
+
+
+curl --location --request GET 'https://web3.okx.com/api/v6/dex/aggregator/quote?amount=10000000000000000000&chainIndex=1&toTokenAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&fromTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' \
+
+--header 'OK-ACCESS-KEY: 37c541a1-****-****-****-10fe7a038418' \
+--header 'OK-ACCESS-SIGN: leaV********3uw=' \de
+--header 'OK-ACCESS-PASSPHRASE: 1****6' \
+--header 'OK-ACCESS-TIMESTAMP: 2023-10-18T12:21:41.274Z'
+{
+    "code": "0",
+    "data": [
+        {
+            "chainIndex": "130",
+            "contextSlot": 0,
+            "dexRouterList": [
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "30"
+                    },
+                    "fromToken": {
+                        "decimal": "18",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x4200000000000000000000000000000000000006",
+                        "tokenSymbol": "WETH",
+                        "tokenUnitPrice": "4191.043356462183138854"
+                    },
+                    "fromTokenIndex": "0",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                        "tokenSymbol": "USDC",
+                        "tokenUnitPrice": "0.999692348812448693"
+                    },
+                    "toTokenIndex": "4"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "5"
+                    },
+                    "fromToken": {
+                        "decimal": "18",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x4200000000000000000000000000000000000006",
+                        "tokenSymbol": "WETH",
+                        "tokenUnitPrice": "4191.043356462183138854"
+                    },
+                    "fromTokenIndex": "0",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "toTokenIndex": "3"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "5"
+                    },
+                    "fromToken": {
+                        "decimal": "18",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x4200000000000000000000000000000000000006",
+                        "tokenSymbol": "WETH",
+                        "tokenUnitPrice": "4191.043356462183138854"
+                    },
+                    "fromTokenIndex": "0",
+                    "toToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x0555e30da8f98308edb960aa94c0db47230d2b9c",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112879.983830393508167243"
+                    },
+                    "toTokenIndex": "2"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "5"
+                    },
+                    "fromToken": {
+                        "decimal": "18",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x4200000000000000000000000000000000000006",
+                        "tokenSymbol": "WETH",
+                        "tokenUnitPrice": "4191.043356462183138854"
+                    },
+                    "fromTokenIndex": "0",
+                    "toToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x927b51f251480a681271180da4de28d44ec4afb8",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112634.107075070841530997"
+                    },
+                    "toTokenIndex": "1"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "55"
+                    },
+                    "fromToken": {
+                        "decimal": "18",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x4200000000000000000000000000000000000006",
+                        "tokenSymbol": "WETH",
+                        "tokenUnitPrice": "4191.043356462183138854"
+                    },
+                    "fromTokenIndex": "0",
+                    "toToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x927b51f251480a681271180da4de28d44ec4afb8",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112634.107075070841530997"
+                    },
+                    "toTokenIndex": "1"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "3"
+                    },
+                    "fromToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x927b51f251480a681271180da4de28d44ec4afb8",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112634.107075070841530997"
+                    },
+                    "fromTokenIndex": "1",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "toTokenIndex": "3"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "97"
+                    },
+                    "fromToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x927b51f251480a681271180da4de28d44ec4afb8",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112634.107075070841530997"
+                    },
+                    "fromTokenIndex": "1",
+                    "toToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x0555e30da8f98308edb960aa94c0db47230d2b9c",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112879.983830393508167243"
+                    },
+                    "toTokenIndex": "2"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "48"
+                    },
+                    "fromToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x0555e30da8f98308edb960aa94c0db47230d2b9c",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112879.983830393508167243"
+                    },
+                    "fromTokenIndex": "2",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                        "tokenSymbol": "USDC",
+                        "tokenUnitPrice": "0.999692348812448693"
+                    },
+                    "toTokenIndex": "4"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "52"
+                    },
+                    "fromToken": {
+                        "decimal": "8",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x0555e30da8f98308edb960aa94c0db47230d2b9c",
+                        "tokenSymbol": "WBTC",
+                        "tokenUnitPrice": "112879.983830393508167243"
+                    },
+                    "fromTokenIndex": "2",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "toTokenIndex": "3"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Euler",
+                        "percent": "73"
+                    },
+                    "fromToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "fromTokenIndex": "3",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                        "tokenSymbol": "USDC",
+                        "tokenUnitPrice": "0.999692348812448693"
+                    },
+                    "toTokenIndex": "4"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Euler",
+                        "percent": "26"
+                    },
+                    "fromToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "fromTokenIndex": "3",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                        "tokenSymbol": "USDC",
+                        "tokenUnitPrice": "0.999692348812448693"
+                    },
+                    "toTokenIndex": "4"
+                },
+                {
+                    "dexProtocol": {
+                        "dexName": "Uniswap V4",
+                        "percent": "1"
+                    },
+                    "fromToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x9151434b16b9763660705744891fa906f660ecc5",
+                        "tokenSymbol": "USDT",
+                        "tokenUnitPrice": "1.000313193103130296"
+                    },
+                    "fromTokenIndex": "3",
+                    "toToken": {
+                        "decimal": "6",
+                        "isHoneyPot": false,
+                        "taxRate": "0",
+                        "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                        "tokenSymbol": "USDC",
+                        "tokenUnitPrice": "0.999692348812448693"
+                    },
+                    "toTokenIndex": "4"
+                }
+            ],
+            "estimateGasFee": "1002000",
+            "fromToken": {
+                "decimal": "18",
+                "isHoneyPot": false,
+                "taxRate": "0",
+                "tokenContractAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "tokenSymbol": "UNICHAIN_ETH",
+                "tokenUnitPrice": "4191.043356462183138854"
+            },
+            "fromTokenAmount": "10000000000000000000000",
+            "priceImpactPercent": "-67.53",
+            "router": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee--0x927b51f251480a681271180da4de28d44ec4afb8--0x0555e30da8f98308edb960aa94c0db47230d2b9c--0x9151434b16b9763660705744891fa906f660ecc5--0x078d782b760474a361dda0af3839290b0ef57ad6",
+            "swapMode": "exactIn",
+            "toToken": {
+                "decimal": "6",
+                "isHoneyPot": false,
+                "taxRate": "0",
+                "tokenContractAddress": "0x078d782b760474a361dda0af3839290b0ef57ad6",
+                "tokenSymbol": "USDC",
+                "tokenUnitPrice": "0.999692348812448693"
+            },
+            "toTokenAmount": "13614286937853",
+            "tradeFee": "0.00001607688116316"
+        }
+    ],
+    "msg": ""
+}

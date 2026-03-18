@@ -7,6 +7,29 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "okx-swap",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceFolder}/okx-swap.js",
+      "envFile": "${workspaceFolder}/.env",
+      "args": ["execute"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "quick-axios-proxy",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceFolder}/quick-axios-proxy.js",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "quick-https-proxy",
       "skipFiles": [
         "<node_internals>/**"

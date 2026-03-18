@@ -1,0 +1,471 @@
+{
+    "code": "0",
+    "data": [
+        {
+            "id": "34",
+            "logo": "https://static.okx.com/cdn/wallet/logo/UNI.png",
+            "name": "Uniswap V2"
+        },
+        {
+            "id": "29",
+            "logo": "https://static.okx.com/cdn/wallet/logo/SUSHI.png",
+            "name": "SushiSwap"
+        },
+        {
+            "id": "47",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/Dex_DefiSwap.png",
+            "name": "DeFi Swap"
+        },
+        {
+            "id": "49",
+            "logo": "https://static.okx.com/cdn/wallet/logo/convxswap.png",
+            "name": "Convergence"
+        },
+        {
+            "id": "48",
+            "logo": "https://static.okx.com/cdn/wallet/logo/luaswap.png",
+            "name": "LuaSwap"
+        },
+        {
+            "id": "40",
+            "logo": "https://static.okx.com/cdn/wallet/logo/SHIB.png",
+            "name": "ShibaSwap"
+        },
+        {
+            "id": "30",
+            "logo": "https://static.okx.com/cdn/wallet/logo/pancake.png",
+            "name": "PancakeSwap"
+        },
+        {
+            "id": "53",
+            "logo": "https://static.okx.com/cdn/wallet/logo/UNI.png",
+            "name": "Uniswap V3"
+        },
+        {
+            "id": "54",
+            "logo": "https://static.okx.com/cdn/wallet/logo/balancer.png",
+            "name": "Balancer V1"
+        },
+        {
+            "id": "51",
+            "logo": "https://static.okx.com/cdn/wallet/logo/balancer.png",
+            "name": "Balancer V2"
+        },
+        {
+            "id": "55",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Curve V1"
+        },
+        {
+            "id": "58",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Curve V2"
+        },
+        {
+            "id": "52",
+            "logo": "https://static.okx.com/cdn/wallet/logo/bancor.png",
+            "name": "Bancor"
+        },
+        {
+            "id": "59",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Kyber.png",
+            "name": "Kyber"
+        },
+        {
+            "id": "81",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Synapse.png",
+            "name": "Synapse"
+        },
+        {
+            "id": "83",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Wombat.png",
+            "name": "Wombat"
+        },
+        {
+            "id": "80",
+            "logo": "https://static.okx.com/cdn/wallet/logo/DODO.png",
+            "name": "DODO"
+        },
+        {
+            "id": "82",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Shell.png",
+            "name": "Shell"
+        },
+        {
+            "id": "88",
+            "logo": "https://static.okx.com/cdn/wallet/logo/DODO.png",
+            "name": "DODO V2"
+        },
+        {
+            "id": "91",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Smoothy.png",
+            "name": "Smoothy"
+        },
+        {
+            "id": "92",
+            "logo": "https://static.okx.com/cdn/wallet/logo/RadioShack.png",
+            "name": "RadioShack"
+        },
+        {
+            "id": "90",
+            "logo": "https://static.okx.com/cdn/wallet/logo/ORION.png",
+            "name": "Orion"
+        },
+        {
+            "id": "89",
+            "logo": "https://static.okx.com/cdn/wallet/logo/FraxFinance.png",
+            "name": "FraxSwap"
+        },
+        {
+            "id": "99",
+            "logo": "https://static.okx.com/cdn/wallet/logo/okb.png",
+            "name": "OKX DEX"
+        },
+        {
+            "id": "101",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Swapr.png",
+            "name": "Swapr"
+        },
+        {
+            "id": "351",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_DFX.png",
+            "name": "DFX Finance V3"
+        },
+        {
+            "id": "104",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_bancor.png",
+            "name": "Bancor V3"
+        },
+        {
+            "id": "105",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_PSM.png",
+            "name": "PSM"
+        },
+        {
+            "id": "108",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Verse.png",
+            "name": "Verse"
+        },
+        {
+            "id": "248",
+            "logo": "https://static.okx.com/cdn/wallet/logo/okb.png",
+            "name": "OKX Limit Order"
+        },
+        {
+            "id": "132",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_defiplaza.png",
+            "name": "DefiPlaza"
+        },
+        {
+            "id": "114",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Swerve.png",
+            "name": "Swerve"
+        },
+        {
+            "id": "113",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Kyber.png",
+            "name": "Kyber Elastic"
+        },
+        {
+            "id": "131",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_defiplaza.png",
+            "name": "StablePlaza"
+        },
+        {
+            "id": "134",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Lido.png",
+            "name": "Lido"
+        },
+        {
+            "id": "135",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_NOMISWAP.png",
+            "name": "Nomiswap Stable"
+        },
+        {
+            "id": "136",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/solidly.png",
+            "name": "Solidly"
+        },
+        {
+            "id": "215",
+            "logo": "https://static.okx.com/cdn/wallet/logo/traderjoexyz.png",
+            "name": "Trader Joe V2.1"
+        },
+        {
+            "id": "153",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Cafe_Swap.png",
+            "name": "Cafe Swap"
+        },
+        {
+            "id": "141",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_ELK.png",
+            "name": "ELK"
+        },
+        {
+            "id": "102",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Unifi.png",
+            "name": "Unifi"
+        },
+        {
+            "id": "159",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_LINKSWAP.png",
+            "name": "LINKSWAP"
+        },
+        {
+            "id": "160",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Sake_Swap.png",
+            "name": "Sake Swap"
+        },
+        {
+            "id": "27",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Curve 3CRV"
+        },
+        {
+            "id": "202",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Aave.png",
+            "name": "Aave V2"
+        },
+        {
+            "id": "230",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Aave.png",
+            "name": "Aave V3"
+        },
+        {
+            "id": "199",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Compound.png",
+            "name": "Compound"
+        },
+        {
+            "id": "266",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Compound.png",
+            "name": "Compound V3"
+        },
+        {
+            "id": "184",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_logo_Frax.png",
+            "name": "sfrxETH"
+        },
+        {
+            "id": "356",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_logo_Frax.png",
+            "name": "sFRAX"
+        },
+        {
+            "id": "186",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Lido.png",
+            "name": "stMatic"
+        },
+        {
+            "id": "200",
+            "logo": "https://static.okx.com/cdn/wallet/logo/pancake.png",
+            "name": "PancakeSwap V3"
+        },
+        {
+            "id": "203",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Dex_Rocketpool.png",
+            "name": "RocketPool"
+        },
+        {
+            "id": "204",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_1inch_limit_order.png",
+            "name": "1inch LP v1.1"
+        },
+        {
+            "id": "210",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Curve TNG"
+        },
+        {
+            "id": "330",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "CurveNG"
+        },
+        {
+            "id": "214",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Mooniswap.png",
+            "name": "Mooniswap"
+        },
+        {
+            "id": "213",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Integral.png",
+            "name": "Integral"
+        },
+        {
+            "id": "218",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Maverick.png",
+            "name": "Maverick V1"
+        },
+        {
+            "id": "226",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Curve LLAMMA"
+        },
+        {
+            "id": "234",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/Dex_xSigma.png",
+            "name": "xSigma"
+        },
+        {
+            "id": "239",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/Dex_Sushiswap_V3.png",
+            "name": "Sushiswap V3"
+        },
+        {
+            "id": "257",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/Synthetix.png",
+            "name": "Wrapped Synthetix"
+        },
+        {
+            "id": "262",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/solidly.png",
+            "name": "Solidly V3"
+        },
+        {
+            "id": "265",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/SmarDex.png",
+            "name": "SmarDex"
+        },
+        {
+            "id": "323",
+            "logo": "https://static.okx.com/cdn/explorer/dex/logo/Synthetix.png",
+            "name": "sETH Wrapper"
+        },
+        {
+            "id": "476",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Ekubo.png",
+            "name": "Ekubo ETH"
+        },
+        {
+            "id": "328",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/sDai.png",
+            "name": "sDai"
+        },
+        {
+            "id": "333",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/RingProtocol.png",
+            "name": "Ring Protocol"
+        },
+        {
+            "id": "365",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Angle.png",
+            "name": "Angle"
+        },
+        {
+            "id": "352",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Angle.png",
+            "name": "Angle Stake"
+        },
+        {
+            "id": "354",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Origin.png",
+            "name": "Origin Wrapper"
+        },
+        {
+            "id": "355",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Origin.png",
+            "name": "Origin"
+        },
+        {
+            "id": "379",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Unicly.png",
+            "name": "Unicly"
+        },
+        {
+            "id": "380",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_Maverick.png",
+            "name": "Maverick V2"
+        },
+        {
+            "id": "394",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/novabits.png",
+            "name": "Novabits V3"
+        },
+        {
+            "id": "399",
+            "logo": "https://static.okx.com/cdn/wallet/logo/UNI.png",
+            "name": "Uniswap V1"
+        },
+        {
+            "id": "401",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Fluid.png",
+            "name": "Fluid"
+        },
+        {
+            "id": "404",
+            "logo": "https://static.okx.com/cdn/wallet/logo/dex_PSM.png",
+            "name": "LitePSM"
+        },
+        {
+            "id": "409",
+            "logo": "https://static.okx.com/cdn/wallet/logo/balancer.png",
+            "name": "Balancer CoW AMM"
+        },
+        {
+            "id": "406",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/native.png",
+            "name": "Native"
+        },
+        {
+            "id": "427",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Saving_USDS.png",
+            "name": "Saving USDS"
+        },
+        {
+            "id": "431",
+            "logo": "https://static.okx.com/cdn/wallet/logo/Curve.png",
+            "name": "Saving CRV Stake Factory"
+        },
+        {
+            "id": "428",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Saving_GYD.png",
+            "name": "Saving GYD"
+        },
+        {
+            "id": "433",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/EtherFi.png",
+            "name": "EtherFi weETH"
+        },
+        {
+            "id": "437",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/EtherFi.png",
+            "name": "EtherFi eETH"
+        },
+        {
+            "id": "436",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/EtherFi.png",
+            "name": "EtherFi eBTC"
+        },
+        {
+            "id": "438",
+            "logo": "https://static.okx.com/cdn/wallet/logo/UNI.png",
+            "name": "Uniswap V4"
+        },
+        {
+            "id": "450",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/native.png",
+            "name": "NativeV3"
+        },
+        {
+            "id": "466",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Gamma_Swap.png",
+            "name": "Gamma Swap"
+        },
+        {
+            "id": "482",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Amber.png",
+            "name": "Amber"
+        },
+        {
+            "id": "522",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/Fluid_Lite.png",
+            "name": "Fluid Lite"
+        },
+        {
+            "id": "523",
+            "logo": "https://static.okx.com/cdn/web3/dex/logo/1010_Trading.png",
+            "name": "1010 Trading"
+        }
+    ],
+    "msg": ""
+}
